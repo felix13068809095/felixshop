@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link href="{:config('static_admin')}/css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="{:config('static_admin')}/js/jquery.js"></script>
+    <style>
+        .active{
+            border-bottom: solid 3px #66c9f3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">表单</a></li>
+        </ul>
+    </div>
+    <div class="formbody">
+        <div class="formtitle">
+            <span class="active">新增權限 </span>
+
+        </div>
+        <form action="{:url('/admin/auth/add')}" method="post">
+            <ul class="forminfo">
+                <li>
+                    <label>權限名稱</label>
+                    <input name="auth_name" placeholder="请输入權限名稱" type="text" class="dfinput" /><i>名称不能超过30个字符</i>
+                </li>
+                <li>
+                    <label>父級權限</label>
+                    <select name='pid' class="dfinput">
+                        <option value=''>請選擇父級權限</option>
+                        <option value='0'>頂級權限</option>
+                        {foreach name='auths' item='v'}
+                        <option value='{$v["auth_id"]}'>
+                            {:str_repeat('--',$v['level'])}{$v['auth_name']}
+                        </option>
+                        {/foreach}
+                    </select>
+                </li>
+                <li>
+                    <label>控制權限</label>
+                    <input name="auth_c" placeholder="請輸入控制權限" type="text" class="dfinput" />
+                </li>
+                <li>
+                    <label>方法名</label>
+                    <input name="auth_a" placeholder="請輸入方法名" type="text" class="dfinput" />
+                </li>
+            </ul>
+			<li>
+                    <label>&nbsp;</label>
+                    <input name="" id="btnSubmit" type="submit" class="btn" value="确认保存" />
+             </li>
+        </form>
+    </div>
+</body>
+<script>
+    $("select[name='pid']").change(function(){
+        //獲取選中的值
+        var value = $(this).val();
+        if(value == 0){
+            $("input[name=auth_c],input[name='auth_a']").prop('disabled',true).val('');
+        }else{
+            $("input[name=auth_c],input[name='auth_a']").prop('disabled',false);
+        }
+    });
+</script>
+
+</html>

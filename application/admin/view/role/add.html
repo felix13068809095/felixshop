@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link href="{:config('static_admin')}/css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="{:config('static_admin')}/js/jquery.js"></script>
+    <script type="text/javascript" src="{:config('static_admin')}/js/jquery-1.8.3.js"></script>
+    <style type="text/css">
+        .active{border-bottom: solid 5px #66c9f3;}
+        .box th, .box td{border: 1px solid #ccc;}
+		.box b{color:blue;}
+		li{list-style: none;}
+		.box .ul_f{float:left;} 
+		.box .son{padding-left: 15px;}
+    </style>
+</head>
+
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">表单</a></li>
+        </ul>
+    </div>
+    <div class="formbody">
+        <div class="formtitle">
+            <span class="active">新增角色 </span>
+
+        </div>
+        <form action="" method="post">
+            <ul class="forminfo">
+                <li>
+                    <label>角色名稱</label>
+                    <input name="role_name" placeholder="请输入角色名稱" type="text" class="dfinput" />
+            </ul>
+
+            <table width="600px" border="1px" rules="all" class="box">            
+                <?php  foreach($chilrens[0] as $one):  ?>
+                <tr>
+                    <th><input name="auth_ids_list[]" type="checkbox"  onclick="select_all(this);"  value="<?php echo $one; ?>"><?php echo $auths[$one]['auth_name']; ?></th>
+                    <td>
+                        <ul class="ul_f">
+                            <?php foreach($chilrens[$one] as $two): ?>
+                            <b><input name="auth_ids_list[]" type="checkbox" onclick="select_all(this); select_up('<?php echo $one; ?>');" value="<?php echo $two; ?>"><?php echo $auths[$two]['auth_name']; ?></b>
+                            <?php endforeach; ?>
+                            <ul>
+                                <?php foreach($chilrens[$two] as $three): ?>
+                                <li ><input name="auth_ids_list[]" type="checkbox" onclick="select_up('<?php echo $one.','.$two ?>');" value="<?php echo $three; ?>"><?php echo $auths[$three]['auth_name']; ?></li>
+                                <?php  endforeach; ?>
+                            </ul>
+                        </ul>                     
+                    </td>
+                </tr>
+                <?php  endforeach; ?>
+       
+			<li>
+                    <label>&nbsp;</label>
+                    <input name="" id="btnSubmit" type="submit" class="btn" value="确认保存" />
+             </li>
+        </form>
+    </div>
+</body>
+<script>
+    // 點擊父級 讓子級跟著父級 選中或不選中
+    function select_all(ele){
+        //ele是當前input的元素DOM對象
+        $(ele).parent().next().find('input').prop('checked',ele.checked);
+    }
+
+    //點擊子級 選中對應的父級
+    function select_up(ids){
+        // ids = 1  or  1,2
+        //ids 對應是父級權限的複選框的value的值
+        //找到對應value值的id , 在設置選中即可
+
+        var arr = ids.split(',');
+        for(var i=0;i<arr.length;i++){
+            $("input[type='checkbox'][value="+arr[i]+"]").prop('checked',true);
+        }
+    }
+
+</script>
+
+</html>
